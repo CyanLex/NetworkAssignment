@@ -9,7 +9,7 @@ using UnityEngine.InputSystem.Controls;
 public class Player : NetworkBehaviour
 {
     public NetworkVariable<float> currentTime = new(0f);
-    public NetworkVariable<float> bestTime = new(99f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    public NetworkVariable<float> bestTime = new(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     public static NetworkVariable<bool> isTimerRunning = new(false);
     [SerializeField] private CinemachineVirtualCamera vc;
     [SerializeField] private AudioListener audioListener;
@@ -22,6 +22,7 @@ public class Player : NetworkBehaviour
 
         if (IsOwner)
         {
+            UpdateBestTimeServerRpc(0f);
             audioListener.enabled = true;
             vc.Priority = 1;
         }
@@ -107,9 +108,17 @@ public class Player : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     void UpdateBestTimeServerRpc(float playerCurrentTime)
     {
-        if (bestTime.Value == 99f || playerCurrentTime < bestTime.Value)
+        
+        
+        if (bestTime.Value == 99f || playerCurrentTime < bestTime.Value && bestTime.Value!=0f)
         {
             bestTime.Value = playerCurrentTime;
+         
+        }
+        if (bestTime.Value == 0f)
+        {
+            bestTime.Value = 99f;
+           
         }
     }
 

@@ -25,7 +25,6 @@ public class Floor : NetworkBehaviour
         {
             ground.GetComponent<NetworkObject>().Despawn();
             isGroundSpawned = false;
-            Debug.Log("Ground Despawned");
 
             StartCoroutine(RespawnGround(3f));
         }

@@ -45,7 +45,7 @@ public class RestartPlatform : NetworkBehaviour
             }
             else
             {
-                playerObject.transform.position = spawn;
+                playerObject.transform.position = spawn; // sometimes it doesnt work?
             }
         }
     }
